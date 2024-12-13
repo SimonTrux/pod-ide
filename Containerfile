@@ -8,13 +8,18 @@ RUN apk update && apk add neovim=~=0.10.0 bash git curl wget ripgrep
 FROM base AS builder
 
 RUN apk add gcc musl-dev make python3 nodejs npm gzip unzip
-RUN git clone https://github.com/josean-dev/dev-environment-files.git /tmp/devfiles
 
-RUN mkdir -p ~/.config
-RUN cp -r /tmp/devfiles/.config/nvim ~/.config/ 
+## OLD BLOCK FROM GIT
+# RUN git clone https://github.com/josean-dev/dev-environment-files.git /tmp/devfiles
+# RUN mkdir -p ~/.config
+# RUN cp -r /tmp/devfiles/.config/nvim ~/.config/ 
 
-RUN nvim --headless "+Lazy! sync" +qa
-RUN nvim --headless +MasonToolsInstallSync +qa
+COPY config_nvim /root/.config/nvim
+
+RUN nvim --headless "+Lazy! sync" +MasonToolsInstallSync +qa
+
+#RUN nvim --headless "+Lazy! sync" +qa
+#RUN nvim --headless +MasonToolsInstallSync +qa
 
 #RUN touch /tmp/from_builder
 
