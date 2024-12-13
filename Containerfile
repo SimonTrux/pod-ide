@@ -1,16 +1,35 @@
-FROM alpine:3.20.3
+# BASE
+FROM alpine:3.20.3 AS base
+
+RUN apk update && apk add neovim=~=0.10.0 bash git curl wget ripgrep
 
 
-RUN apk update
-RUN apk add git curl wget make gcc bash
-RUN apk add python3~=3.12.7 neovim=~=0.10.0
-RUN apk add nodejs npm
+# BUILDER
+FROM base AS builder
 
-RUN mkdir -p /workdir
+RUN apk add gcc musl-dev make python3 nodejs npm gzip unzip
+RUN git clone https://github.com/josean-dev/dev-environment-files.git /tmp/devfiles
 
-WORKDIR /workdir
+RUN mkdir -p ~/.config
+RUN cp -r /tmp/devfiles/.config/nvim ~/.config/ 
 
-SHELL [ "/bin/bash" ]
-#ENTRYPOINT [ "/usr/bin/tail", "-f", "/dev/null" ]
+RUN nvim --headless "+Lazy! sync" +qa
+RUN nvim --headless +MasonToolsInstallSync +qa
+
+#RUN touch /tmp/from_builder
+
+ENTRYPOINT [ "/bin/bash" ]
+
+# FINAL RUNNER
+#FROM base AS runner
+#
+#RUN mkdir -p ~/.config
+#RUN mkdir -p ~/.local/share
+#
+#COPY --from=builder ~/.config/nvim ~/.config/
+#COPY --from=builder ~/.local/share/nvim ~/.local/share/
+#
+#RUN mkdir -p /workdir
+#WORKDIR /workdir
+#
 #ENTRYPOINT [ "/bin/bash" ]
-
