@@ -13,14 +13,12 @@ verb="$1"
 alias_name="$2"
 command_to_alias="$3"
 
-alias_file="/tmp/test"
+alias_file="~/.bashrc"
 
 if ! grep -q "alias ${alias_name}=" $alias_file && [[ $verb = "install" ]] ; then
-# echo -e "Installing alias ide=${1} \n"
   echo "alias ${alias_name}='$command_to_alias'" >> $alias_file 
   source $alias_file
 elif grep -q "alias ${alias_name}=" $alias_file && [[ $verb = "remove" ]] ; then
-# sed -i '/^alias\side=/d' $alias_file
   sed -i "/^alias\s${alias_name}=/d" $alias_file
 fi
 

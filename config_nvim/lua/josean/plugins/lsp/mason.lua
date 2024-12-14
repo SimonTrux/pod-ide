@@ -44,7 +44,7 @@ return {
         "pylint",
         "eslint_d",
         "dockerls",
-        "terraform_ls",
+        "terraformls",
         "gitlab_ci_ls",
       },
     })
