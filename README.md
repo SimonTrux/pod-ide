@@ -27,3 +27,5 @@ ide text_file
 - Attempt as a slimmer image with multi stage build.
 - Make container persistent and attach for smaller cpu footprint.
 - Endpoint as nvim or in bash ?
+
+# Test signed commit
